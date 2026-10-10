@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
-const logoAsset = { url: "/brand-chatdunia.svg" };
+const logoAsset = { url: "/chatdunia/logo.png" };
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -94,7 +94,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "icon", href: logoAsset.url, type: "image/png" },
+      { rel: "icon", href: "/chatdunia/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/chatdunia/logo.png" },
     ],
   }),
   shellComponent: RootShell,

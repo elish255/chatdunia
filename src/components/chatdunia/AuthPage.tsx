@@ -48,7 +48,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
   }
 
   return <main className="auth-page auth-register"><section className="auth-content">
-    <img src="/brand-chatdunia.svg" alt="Chatdunia" width={64} height={64} className="mx-auto mb-4 rounded-2xl" />
+    <img src="/chatdunia/logo.png" alt="Chatdunia" width={64} height={64} className="mx-auto mb-4 rounded-2xl" />
     <h1>{register ? "Fungua Akaunti" : mode === "login" ? "Ingia kwenye Akaunti" : "Rejesha Password"}</h1>
     <p className="auth-subtitle">{register ? "Jaza taarifa zako kisha endelea kwenye ukurasa wa malipo." : "Tumia username na password ulizotumia wakati wa usajili."}</p>
     <form onSubmit={submit}>
