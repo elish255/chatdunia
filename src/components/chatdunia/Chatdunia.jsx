@@ -5,15 +5,10 @@ import logoAsset from "@/assets/chatdunia/logo.png.asset.json";
 import { ArrowRight as f, BellRing as p, CircleCheck as m, Clock as h, Download as g, EllipsisVertical as _, Headphones as v, MessageCircle as y, MessageSquare as b, Moon as ee, PhoneOff as x, Phone as S, Plus as C, Send as w, Share as T, ShieldCheck as E, Star as D, Sun as O, TrendingUp as te, UserPlus as ne, Video as k, Wallet as A, X as j } from "lucide-react";
 const assetPointers = import.meta.glob("/src/assets/chatdunia/*.jpg.asset.json", { eager: true, import: "default" });
 const portraits = Object.fromEntries(Object.entries(assetPointers).map(([path, asset]) => [path.split("/").pop().replace(".jpg.asset.json", ""), asset.url]));
-function themed(props) {
- if (!props?.className) return props;
- return { ...props, className: props.className.replaceAll("text-white", "text-on-color").replaceAll("bg-black", "bg-overlay").replaceAll("bg-white", "bg-on-color").replaceAll("border-white", "border-on-color").replaceAll("tracking-tight", "tracking-normal").replaceAll("tracking-wide", "tracking-normal") };
-}
 function render(factory, type, props, key) {
- const next = themed(props);
- if (type === "button") return factory(Button, { ...next, variant: "reference", size: "reference" }, key);
- if (type === "a") return factory(Button, { variant: "reference", size: "reference", asChild: true, children: factory("a", next) }, key);
- return factory(type, next, key);
+ if (type === "button") return factory(Button, { ...props, variant: "reference", size: "reference" }, key);
+ if (type === "a") return factory(Button, { variant: "reference", size: "reference", asChild: true, children: factory("a", props) }, key);
+ return factory(type, props, key);
 }
 const runtime = { Fragment, jsx: (type, props, key) => render(reactJsx, type, props, key), jsxs: (type, props, key) => render(reactJsxs, type, props, key) };
 const M = [
@@ -236,7 +231,7 @@ function q({ person: e, onChat: t, onCall: n }) {
                 ],
               }),
               (0, K.jsx)(`span`, {
-                className: `mt-1 inline-block rounded-md px-2 py-0.5 text-[10px] font-bold lowercase tracking-wide ${e.online ? `bg-success/15 text-success` : `bg-destructive/15 text-destructive`}`,
+                className: `mt-1 inline-block rounded-md px-2 py-0.5 text-[10px] font-bold lowercase tracking-normal ${e.online ? `bg-success/15 text-success` : `bg-destructive/15 text-destructive`}`,
                 children: e.online ? `online` : `offline`,
               }),
               (0, K.jsxs)(`div`, {
@@ -257,12 +252,12 @@ function q({ person: e, onChat: t, onCall: n }) {
           }),
           (0, K.jsxs)(`button`, {
             onClick: () => n(`voice`),
-            className: `flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-voice px-3 py-2.5 text-xs font-bold text-white transition active:scale-95 sm:flex-none`,
+            className: `flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-voice px-3 py-2.5 text-xs font-bold text-on-color transition active:scale-95 sm:flex-none`,
             children: [(0, K.jsx)(S, { className: `size-4` }), ` Voice Call`],
           }),
           (0, K.jsxs)(`button`, {
             onClick: () => n(`video`),
-            className: `flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-video px-3 py-2.5 text-xs font-bold text-white transition active:scale-95 sm:flex-none`,
+            className: `flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-video px-3 py-2.5 text-xs font-bold text-on-color transition active:scale-95 sm:flex-none`,
             children: [(0, K.jsx)(k, { className: `size-4` }), ` Video Call`],
           }),
         ],
@@ -456,17 +451,17 @@ function oe({ person: e, onClose: t, onPaid: n }) {
     y = String(Math.floor(f / 60)).padStart(2, `0`),
     b = String(f % 60).padStart(2, `0`);
   return (0, K.jsx)(`div`, {
-    className: `fixed inset-0 z-[70] flex items-end justify-center bg-black/60 p-0 backdrop-blur-sm sm:items-center sm:p-4`,
+    className: `fixed inset-0 z-[70] flex items-end justify-center bg-overlay/60 p-0 backdrop-blur-sm sm:items-center sm:p-4`,
     children: (0, K.jsxs)(`div`, {
       className: `card-soft flex h-[92vh] w-full max-w-lg flex-col overflow-hidden sm:h-[80vh]`,
       children: [
         (0, K.jsxs)(`div`, {
-          className: `grad-brand flex items-center gap-3 p-4 text-white`,
+          className: `grad-brand flex items-center gap-3 p-4 text-on-color`,
           children: [
             (0, K.jsx)(`img`, {
               src: e.photo,
               alt: e.name,
-              className: `size-11 rounded-full border-2 border-white/70 object-cover`,
+              className: `size-11 rounded-full border-2 border-on-color/70 object-cover`,
             }),
             (0, K.jsxs)(`div`, {
               className: `min-w-0 flex-1`,
@@ -483,13 +478,13 @@ function oe({ person: e, onClose: t, onPaid: n }) {
             }),
             r &&
               (0, K.jsxs)(`span`, {
-                className: `flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 text-sm font-bold tabular-nums`,
+                className: `flex items-center gap-1.5 rounded-full bg-overlay/30 px-3 py-1.5 text-sm font-bold tabular-nums`,
                 children: [(0, K.jsx)(h, { className: `size-4` }), y, `:`, b],
               }),
             (0, K.jsx)(`button`, {
               onClick: t,
               "aria-label": `Funga`,
-              className: `rounded-full bg-black/25 p-2`,
+              className: `rounded-full bg-overlay/25 p-2`,
               children: (0, K.jsx)(j, { className: `size-4` }),
             }),
           ],
@@ -558,7 +553,7 @@ function oe({ person: e, onClose: t, onPaid: n }) {
                       onClick: v,
                       disabled: f === 0,
                       "aria-label": `Tuma`,
-                      className: `grad-brand rounded-xl p-3 text-white disabled:opacity-50`,
+                      className: `grad-brand rounded-xl p-3 text-on-color disabled:opacity-50`,
                       children: (0, K.jsx)(w, { className: `size-5` }),
                     }),
                   ],
@@ -590,7 +585,7 @@ function oe({ person: e, onClose: t, onPaid: n }) {
                             children: e.label,
                           }),
                           (0, K.jsx)(`span`, {
-                            className: `grad-profit rounded-lg px-3 py-1.5 text-sm font-bold text-white`,
+                            className: `grad-profit rounded-lg px-3 py-1.5 text-sm font-bold text-on-color`,
                             children: I(e.amount),
                           }),
                         ],
@@ -657,13 +652,13 @@ function se({ person: e, kind: t, onClose: n }) {
       };
     }, []),
     (0, K.jsx)(`div`, {
-      className: `fixed inset-0 z-[85] flex items-center justify-center bg-black/80 p-4`,
+      className: `fixed inset-0 z-[85] flex items-center justify-center bg-overlay/80 p-4`,
       children: (0, K.jsxs)(`div`, {
         className: `animate-pop-in card-soft w-full max-w-sm p-6 text-center`,
         children: [
           t === `video` && !r
             ? (0, K.jsxs)(`div`, {
-                className: `relative mx-auto w-full overflow-hidden rounded-2xl border border-primary/30 bg-black`,
+                className: `relative mx-auto w-full overflow-hidden rounded-2xl border border-primary/30 bg-overlay`,
                 children: [
                   (0, K.jsx)(`video`, {
                     ref: s,
@@ -674,13 +669,13 @@ function se({ person: e, kind: t, onClose: n }) {
                   }),
                   !u &&
                     (0, K.jsx)(`div`, {
-                      className: `absolute inset-0 flex items-center justify-center text-xs text-white/70`,
+                      className: `absolute inset-0 flex items-center justify-center text-xs text-on-color/70`,
                       children: `Inawasha camera...`,
                     }),
                   (0, K.jsx)(`img`, {
                     src: e.photo,
                     alt: e.name,
-                    className: `absolute bottom-2 right-2 size-14 rounded-lg border border-white/30 object-cover`,
+                    className: `absolute bottom-2 right-2 size-14 rounded-lg border border-on-color/30 object-cover`,
                   }),
                 ],
               })
@@ -704,7 +699,7 @@ function se({ person: e, kind: t, onClose: n }) {
                     href: L,
                     target: `_blank`,
                     rel: `noopener noreferrer`,
-                    className: `grad-withdraw mt-4 block w-full rounded-xl px-4 py-3 text-sm font-bold text-white`,
+                    className: `grad-withdraw mt-4 block w-full rounded-xl px-4 py-3 text-sm font-bold text-on-color`,
                     children: `Fungua Account Hapa`,
                   }),
                 ],
@@ -743,7 +738,7 @@ function se({ person: e, kind: t, onClose: n }) {
 }
 function ce({ amount: e, onClose: t }) {
   return (0, K.jsx)(`div`, {
-    className: `fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm`,
+    className: `fixed inset-0 z-[80] flex items-center justify-center bg-overlay/60 p-4 backdrop-blur-sm`,
     children: (0, K.jsxs)(`div`, {
       className: `animate-pop-in card-soft relative w-full max-w-md overflow-hidden p-6`,
       children: [
@@ -754,7 +749,7 @@ function ce({ amount: e, onClose: t }) {
           children: (0, K.jsx)(j, { className: `size-4` }),
         }),
         (0, K.jsx)(`div`, {
-          className: `grad-profit mx-auto mb-4 flex size-14 items-center justify-center rounded-2xl text-white`,
+          className: `grad-profit mx-auto mb-4 flex size-14 items-center justify-center rounded-2xl text-on-color`,
           children: (0, K.jsx)(E, { className: `size-7` }),
         }),
         (0, K.jsx)(`h3`, {
@@ -779,7 +774,7 @@ function ce({ amount: e, onClose: t }) {
           href: L,
           target: `_blank`,
           rel: `noopener noreferrer`,
-          className: `grad-withdraw mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white shadow-lg transition active:scale-95`,
+          className: `grad-withdraw mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-on-color shadow-lg transition active:scale-95`,
           children: [
             `Fungua na Activate Akaunti Hapa `,
             (0, K.jsx)(f, { className: `size-4` }),
@@ -797,7 +792,7 @@ function le({
   onClose: i,
 }) {
   return (0, K.jsx)(`div`, {
-    className: `fixed inset-0 z-[85] flex items-end justify-center bg-black/60 p-0 backdrop-blur-sm sm:items-center sm:p-4`,
+    className: `fixed inset-0 z-[85] flex items-end justify-center bg-overlay/60 p-0 backdrop-blur-sm sm:items-center sm:p-4`,
     children: (0, K.jsxs)(`div`, {
       className: `animate-pop-in card-soft relative w-full max-w-md overflow-hidden p-6 pb-8 sm:pb-6`,
       children: [
@@ -830,7 +825,7 @@ function le({
         e
           ? (0, K.jsxs)(`button`, {
               onClick: r,
-              className: `grad-profit mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-bold text-white shadow-lg active:scale-95`,
+              className: `grad-profit mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-bold text-on-color shadow-lg active:scale-95`,
               children: [
                 (0, K.jsx)(g, { className: `size-4` }),
                 ` Install Sasa`,
@@ -999,7 +994,7 @@ function de() {
         (0, K.jsx)(`div`, {
           className: `fixed left-1/2 top-3 z-[90] w-[94%] max-w-md -translate-x-1/2`,
           children: (0, K.jsxs)(`div`, {
-            className: `animate-pop-in grad-balance flex items-start gap-3 rounded-2xl p-3.5 text-white shadow-2xl`,
+            className: `animate-pop-in grad-balance flex items-start gap-3 rounded-2xl p-3.5 text-on-color shadow-2xl`,
             children: [
               (0, K.jsx)(p, {
                 className: `mt-0.5 size-5 shrink-0 animate-lop`,
@@ -1038,7 +1033,7 @@ function de() {
                 className: `flex-1`,
                 children: [
                   (0, K.jsx)(`h1`, {
-                    className: `text-2xl font-black tracking-tight`,
+                    className: `text-2xl font-black tracking-normal`,
                     children: `Chatdunia`,
                   }),
                   (0, K.jsx)(`p`, {
@@ -1062,13 +1057,13 @@ function de() {
             children: [
               (0, K.jsxs)(`button`, {
                 onClick: () => N(!0),
-                className: `grad-profit flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-bold text-white shadow-lg`,
+                className: `grad-profit flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-bold text-on-color shadow-lg`,
                 children: [
                   (0, K.jsx)(g, { className: `size-4` }),
                   ` Download Chatdunia App`,
                   E &&
                     (0, K.jsx)(`span`, {
-                      className: `size-2 animate-ping rounded-full bg-white`,
+                      className: `size-2 animate-ping rounded-full bg-on-color`,
                     }),
                 ],
               }),
@@ -1076,7 +1071,7 @@ function de() {
                 href: `https://wa.me/${R}`,
                 target: `_blank`,
                 rel: `noopener noreferrer`,
-                className: `grad-withdraw flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-bold text-white shadow-lg`,
+                className: `grad-withdraw flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-bold text-on-color shadow-lg`,
                 children: [
                   (0, K.jsx)(v, { className: `size-4` }),
                   ` Customer Service`,
@@ -1109,7 +1104,7 @@ function de() {
                 value: I(i),
               }),
               (0, K.jsxs)(`div`, {
-                className: `grad-sunset flex min-h-[132px] flex-col justify-between rounded-2xl p-3 text-white shadow-lg sm:p-4`,
+                className: `grad-sunset flex min-h-[132px] flex-col justify-between rounded-2xl p-3 text-on-color shadow-lg sm:p-4`,
                 children: [
                   (0, K.jsxs)(`div`, {
                     className: `flex items-center gap-1.5 text-[11px] font-semibold opacity-90 sm:text-xs`,
@@ -1126,7 +1121,7 @@ function de() {
                     onClick: () => {
                       (w(i), f({ open: !0, amount: null }));
                     },
-                    className: `rounded-xl bg-black/30 px-2 py-2 text-[11px] font-bold sm:text-xs`,
+                    className: `rounded-xl bg-overlay/30 px-2 py-2 text-[11px] font-bold sm:text-xs`,
                     children: `Toa Pesa`,
                   }),
                 ],
@@ -1137,7 +1132,7 @@ function de() {
             href: L,
             target: `_blank`,
             rel: `noopener noreferrer`,
-            className: `grad-brand mt-3 flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-bold text-white shadow-lg`,
+            className: `grad-brand mt-3 flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-bold text-on-color shadow-lg`,
             children: [
               (0, K.jsx)(ne, { className: `size-4` }),
               ` Fungua Account Hapa`,
@@ -1170,7 +1165,7 @@ function de() {
             className: `mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2`,
             children: [
               (0, K.jsxs)(`div`, {
-                className: `card-soft grad-balance p-4 text-white`,
+                className: `card-soft grad-balance p-4 text-on-color`,
                 children: [
                   (0, K.jsx)(`h3`, {
                     className: `text-sm font-black`,
@@ -1182,7 +1177,7 @@ function de() {
                   }),
                   (0, K.jsxs)(`button`, {
                     onClick: () => N(!0),
-                    className: `mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-black/30 px-3 py-2.5 text-xs font-bold`,
+                    className: `mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-overlay/30 px-3 py-2.5 text-xs font-bold`,
                     children: [
                       (0, K.jsx)(g, { className: `size-4` }),
                       ` Download App`,
@@ -1191,7 +1186,7 @@ function de() {
                 ],
               }),
               (0, K.jsxs)(`div`, {
-                className: `card-soft grad-profit p-4 text-white`,
+                className: `card-soft grad-profit p-4 text-on-color`,
                 children: [
                   (0, K.jsxs)(`div`, {
                     className: `flex items-center gap-2`,
@@ -1213,19 +1208,19 @@ function de() {
                         href: `https://wa.me/${R}`,
                         target: `_blank`,
                         rel: `noopener noreferrer`,
-                        className: `rounded-xl bg-black/30 px-3 py-2.5 text-center text-xs font-bold`,
+                        className: `rounded-xl bg-overlay/30 px-3 py-2.5 text-center text-xs font-bold`,
                         children: `WhatsApp: +255 770 490 075`,
                       }),
                       (0, K.jsx)(`a`, {
                         href: z,
                         target: `_blank`,
                         rel: `noopener noreferrer`,
-                        className: `rounded-xl bg-white/20 px-3 py-2.5 text-center text-xs font-bold`,
+                        className: `rounded-xl bg-on-color/20 px-3 py-2.5 text-center text-xs font-bold`,
                         children: `Jiunge na Channel ya WhatsApp`,
                       }),
                       (0, K.jsxs)(`a`, {
                         href: `sms:${B}`,
-                        className: `flex items-center justify-center gap-2 rounded-xl bg-black/40 px-3 py-2.5 text-center text-xs font-bold`,
+                        className: `flex items-center justify-center gap-2 rounded-xl bg-overlay/40 px-3 py-2.5 text-center text-xs font-bold`,
                         children: [
                           (0, K.jsx)(b, { className: `size-4` }),
                           ` Tuma SMS: `,
@@ -1350,7 +1345,7 @@ function de() {
 }
 function $({ grad: e, icon: t, label: n, value: r }) {
   return (0, K.jsxs)(`div`, {
-    className: `${e} flex min-h-[132px] flex-col justify-between rounded-2xl p-3 text-white shadow-lg sm:p-4`,
+    className: `${e} flex min-h-[132px] flex-col justify-between rounded-2xl p-3 text-on-color shadow-lg sm:p-4`,
     children: [
       (0, K.jsxs)(`div`, {
         className: `flex items-center gap-1.5 text-[11px] font-semibold opacity-90 sm:text-xs`,
