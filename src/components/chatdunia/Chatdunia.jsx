@@ -1,10 +1,9 @@
 import * as l from "react";
 import { jsx as reactJsx, jsxs as reactJsxs, Fragment } from "react/jsx-runtime";
 import { Button } from "@/components/ui/button";
-import logoAsset from "@/assets/chatdunia/logo.png.asset.json";
+const logoAsset = { url: "/brand-chatdunia.svg" };
 import { ArrowRight as f, BellRing as p, CircleCheck as m, Clock as h, Download as g, EllipsisVertical as _, Headphones as v, MessageCircle as y, MessageSquare as b, Moon as ee, PhoneOff as x, Phone as S, Plus as C, Send as w, Share as T, ShieldCheck as E, Star as D, Sun as O, TrendingUp as te, UserPlus as ne, Video as k, Wallet as A, X as j } from "lucide-react";
-const assetPointers = import.meta.glob("/src/assets/chatdunia/*.jpg.asset.json", { eager: true, import: "default" });
-const portraits = Object.fromEntries(Object.entries(assetPointers).map(([path, asset]) => [path.split("/").pop().replace(".jpg.asset.json", ""), asset.url]));
+const portraits = Object.fromEntries(Array.from({ length: 52 }, (_, index) => [`person-${index + 1}`, `/avatars/person-${index + 1}.svg`]));
 function render(factory, type, props, key) {
  if (type === "button") return factory(Button, { ...props, variant: "reference", size: "reference" }, key);
  if (type === "a") return factory(Button, { variant: "reference", size: "reference", asChild: true, children: factory("a", props) }, key);
@@ -107,13 +106,13 @@ const M = [
       age: 22 + ((t * 7) % 26),
       country: a,
       flag: o,
-      photo: portraits[`${n ? "women" : "men"}-${s}`],
+      photo: portraits[`person-${t + 1}`],
       online: t % 3 != 2,
       rate: M[t % M.length],
     };
   }),
   I = (e) => `TZS ` + e.toLocaleString(`en-US`),
-  L = `https://moxeraagencies.com/register?ref=WARIDY27`,
+  L = `/register`,
   R = `255770490075`,
   z = `https://whatsapp.com/channel/0029VbD8rnC0LKZD9MUuzN2h`,
   B = `0770429130`,
@@ -697,8 +696,6 @@ function se({ person: e, kind: t, onClose: n }) {
                   }),
                   (0, K.jsx)(`a`, {
                     href: L,
-                    target: `_blank`,
-                    rel: `noopener noreferrer`,
                     className: `grad-withdraw mt-4 block w-full rounded-xl px-4 py-3 text-sm font-bold text-on-color`,
                     children: `Fungua Account Hapa`,
                   }),
@@ -772,8 +769,6 @@ function ce({ amount: e, onClose: t }) {
         }),
         (0, K.jsxs)(`a`, {
           href: L,
-          target: `_blank`,
-          rel: `noopener noreferrer`,
           className: `grad-withdraw mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-on-color shadow-lg transition active:scale-95`,
           children: [
             `Fungua na Activate Akaunti Hapa `,
@@ -1118,9 +1113,7 @@ function de() {
                     children: I(C),
                   }),
                   (0, K.jsx)(`button`, {
-                    onClick: () => {
-                      (w(i), f({ open: !0, amount: null }));
-                    },
+                    onClick: () => { window.location.href = "/withdrawal"; },
                     className: `rounded-xl bg-overlay/30 px-2 py-2 text-[11px] font-bold sm:text-xs`,
                     children: `Toa Pesa`,
                   }),
@@ -1130,8 +1123,6 @@ function de() {
           }),
           (0, K.jsxs)(`a`, {
             href: L,
-            target: `_blank`,
-            rel: `noopener noreferrer`,
             className: `grad-brand mt-3 flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-bold text-on-color shadow-lg`,
             children: [
               (0, K.jsx)(ne, { className: `size-4` }),
