@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 type Mode = "register" | "login" | "forgot" | "reset";
 const countries = ["Tanzania", "Kenya", "Uganda", "Rwanda", "Burundi", "South Sudan", "Democratic Republic of the Congo", "Somalia"];
-const alias = (username: string) => `${username.trim().toLowerCase()}@users.chatdunia.invalid`;
+const alias = (username: string) => `${username.trim().toLowerCase()}@accounts.chatdunia.live`;
 
 export function AuthPage({ mode }: { mode: Mode }) {
   const [busy, setBusy] = useState(false);
