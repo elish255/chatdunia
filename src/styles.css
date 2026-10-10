@@ -107,3 +107,4 @@
 @media(max-width:480px){.auth-content{padding:25px 18px;border-radius:22px}.auth-page{padding:18px 12px}}
 /* Remove the lower duplicate customer-service panel; keep the top action. */
 main section.mt-8.grid.grid-cols-1.gap-3.sm\:grid-cols-2 > div:nth-child(2){display:none!important}
+.premium-gold{background-image:linear-gradient(135deg,#fff0a8 0%,#e4b341 32%,#b77916 68%,#f9e7a0 100%);color:#4b3205!important;border:1px solid rgba(120,78,8,.35);box-shadow:0 12px 28px -12px rgba(184,134,11,.5)}
