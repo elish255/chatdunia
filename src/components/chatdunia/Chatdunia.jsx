@@ -1,4 +1,5 @@
 import * as l from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { jsx as reactJsx, jsxs as reactJsxs, Fragment } from "react/jsx-runtime";
 import { Button } from "@/components/ui/button";
 const logoAsset = { url: "/chatdunia/logo.png" };
@@ -735,7 +736,7 @@ function se({ person: e, kind: t, onClose: n }) {
     })
   );
 }
-function ce({ amount: e, onClose: t }) {
+function ce({ amount: e, onClose: t, onUpgrade: upgrade, active = false }) {
   return (0, K.jsx)(`div`, {
     className: `fixed inset-0 z-[80] flex items-center justify-center bg-overlay/60 p-4 backdrop-blur-sm`,
     children: (0, K.jsxs)(`div`, {
@@ -753,30 +754,19 @@ function ce({ amount: e, onClose: t }) {
         }),
         (0, K.jsx)(`h3`, {
           className: `text-center text-lg font-bold`,
-          children: e
-            ? `Hongera! Umepokea malipo yako ya ${I(e)}`
-            : `Akaunti yako haijawa hai`,
+          children: active ? `Hongera! Malipo yako ya ${I(e || 0)} yamewekwa kwenye balance.` : (e ? `Hongera! Umepokea malipo yako ya ${I(e)}` : `Akaunti yako haijawa hai`),
         }),
-        (0, K.jsxs)(`p`, {
-          className: `mt-3 text-center text-sm leading-relaxed text-muted-foreground`,
-          children: [
-            `Ili kupokea malipo haya yaingie kwenye namba yako ya simu, lazima uwe na akaunti iliyo hai (active account). Akaunti hii itakuwezesha kuingiza malipo yako kwenye namba yako ya simu baada ya kulipwa. Bonyeza hapa chini kufungua na ku-activate akaunti yako kwa kulipia`,
-            ` `,
-            (0, K.jsx)(`span`, {
-              className: `font-bold text-foreground`,
-              children: `TZS 16,000`,
-            }),
-            `.`,
-          ],
-        }),
-        (0, K.jsxs)(`a`, {
-          href: L,
-          className: `grad-withdraw mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-on-color shadow-lg transition active:scale-95`,
-          children: [
-            `Fungua na Activate Akaunti Hapa `,
-            (0, K.jsx)(f, { className: `size-4` }),
-          ],
-        }),
+        active ? (0, K.jsx)(`button`, {
+          onClick: t,
+          className: `grad-profit mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-on-color shadow-lg transition active:scale-95`,
+          children: `Fungua chat`,
+        }) : (0, K.jsxs)(K.Fragment, { children: [
+          (0, K.jsxs)(`p`, {
+            className: `mt-3 text-center text-sm leading-relaxed text-muted-foreground`,
+            children: [`Ili kupokea malipo haya yaingie kwenye namba yako ya simu, lazima uwe na akaunti iliyo hai (active account). Bonyeza hapa chini kufungua na ku-activate akaunti yako kwa kulipia `, (0, K.jsx)(`span`, { className: `font-bold text-foreground`, children: `TZS 16,000` }), `.`],
+          }),
+          (0, K.jsxs)(`a`, { href: L, className: `grad-withdraw mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-on-color shadow-lg transition active:scale-95`, children: [`Fungua na Activate Akaunti Hapa `, (0, K.jsx)(f, { className: `size-4` })] }),
+        ]}),
       ],
     }),
   });
@@ -917,10 +907,22 @@ function de() {
     [E, k] = (0, l.useState)(!1),
     [M, N] = (0, l.useState)(!1),
     [P, F] = (0, l.useState)(null),
-    [V, H] = (0, l.useState)(`desktop`);
+    [V, H] = (0, l.useState)(`desktop`),
+    [accountActive, setAccountActive] = (0, l.useState)(false),
+    [isPremium, setIsPremium] = (0, l.useState)(false);
   ((0, l.useEffect)(() => {
     document.documentElement.classList.toggle(`dark`, e);
   }, [e]),
+    (0, l.useEffect)(() => {
+      let mounted = true;
+      void (async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { data } = await supabase.from("chatdunia_users").select("account_status,activation_paid,is_premium,balance").eq("id", user.id).maybeSingle();
+        if (mounted && data) { setAccountActive(data.account_status === "active"); setIsPremium(!!data.is_premium); const savedBalance = Number(data.balance || 0); r(savedBalance); a(savedBalance); w(savedBalance); }
+      })();
+      return () => { mounted = false; };
+    }, []),
     (0, l.useEffect)(() => {
       S(Array.from({ length: 8 }, () => W()));
       let e = navigator.userAgent;
@@ -958,9 +960,18 @@ function de() {
       }, 15e3);
       return () => clearInterval(e);
     }, []));
-  let U = (0, l.useCallback)((e) => {
-      (a((t) => t + e), r((t) => t + e), s(null), f({ open: !0, amount: e }));
-    }, []),
+  let U = (0, l.useCallback)(async (e) => {
+      s(null);
+      if (!accountActive) { f({ open: !0, amount: e }); return; }
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { h({ id: `earned-error-${Date.now()}`, text: `Ingia kwenye akaunti yako ili kuhifadhi mapato.` }); setTimeout(() => h(null), 5000); return; }
+      const { data: savedBalance, error } = await supabase.rpc("chatdunia_credit_earning", { p_amount: e });
+      if (error) { h({ id: `earned-error-${Date.now()}`, text: `Imeshindwa kuhifadhi mapato: ${error.message}` }); setTimeout(() => h(null), 7000); return; }
+      const nextBalance = Number(savedBalance || 0);
+      a(nextBalance); r(nextBalance); w(nextBalance);
+      h({ id: `earned-${Date.now()}`, text: `Hongera! Malipo ya TZS ${I(e)} yamehifadhiwa kwenye balance yako.` });
+      setTimeout(() => h(null), 5000);
+    }, [accountActive]),
     J = (e) => {
       if (!e.online) {
         (y(
@@ -1033,6 +1044,7 @@ function de() {
                     className: `text-2xl font-black tracking-normal`,
                     children: `Chatdunia`,
                   }),
+                  isPremium && (0, K.jsx)(`span`, { className: `inline-flex mt-1 rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-xs font-black text-amber-800`, children: `✦ PREMIUM ACCOUNT` }),
                   (0, K.jsx)(`p`, {
                     className: `text-[11px] text-muted-foreground`,
                     children: `Chati • Lipwa • Toa Pesa`,
@@ -1088,19 +1100,19 @@ function de() {
             className: `mt-4 grid grid-cols-3 gap-2 sm:gap-3`,
             children: [
               (0, K.jsx)($, {
-                grad: `grad-emerald`,
+                grad: isPremium ? `premium-gold` : `grad-emerald`,
                 icon: (0, K.jsx)(te, { className: `size-5` }),
                 label: `Net Profit`,
                 value: I(n),
               }),
               (0, K.jsx)($, {
-                grad: `grad-royal`,
+                grad: isPremium ? `premium-gold` : `grad-royal`,
                 icon: (0, K.jsx)(A, { className: `size-5` }),
                 label: `Balance`,
                 value: I(i),
               }),
               (0, K.jsxs)(`div`, {
-                className: `grad-sunset flex min-h-[132px] flex-col justify-between rounded-2xl p-3 text-on-color shadow-lg sm:p-4`,
+                className: `${isPremium ? `premium-gold` : `grad-sunset`} flex min-h-[132px] flex-col justify-between rounded-2xl p-3 text-on-color shadow-lg sm:p-4`,
                 children: [
                   (0, K.jsxs)(`div`, {
                     className: `flex items-center gap-1.5 text-[11px] font-semibold opacity-90 sm:text-xs`,
@@ -1330,6 +1342,7 @@ function de() {
       d.open &&
         (0, K.jsx)(ce, {
           amount: d.amount,
+          active: accountActive,
           onClose: () => f({ open: !1, amount: null }),
         }),
     ],
