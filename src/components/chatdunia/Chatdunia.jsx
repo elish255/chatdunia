@@ -203,6 +203,7 @@ function q({ person: e, onChat: t, onCall: n }) {
             children: [
               (0, K.jsx)(`img`, {
                 src: e.photo,
+                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = e.photo.replace(/\.jpg$/, `.svg`); },
                 alt: `${e.name} kutoka ${e.country}`,
                 loading: `lazy`,
                 className: `size-16 rounded-full border-2 border-primary/40 object-cover`,
@@ -680,6 +681,7 @@ function se({ person: e, kind: t, onClose: n }) {
               })
             : (0, K.jsx)(`img`, {
                 src: e.photo,
+                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = e.photo.replace(/\.jpg$/, `.svg`); },
                 alt: e.name,
                 className: `mx-auto size-24 rounded-full border-4 border-primary/40 object-cover`,
               }),
@@ -1062,10 +1064,9 @@ function de() {
                     }),
                 ],
               }),
-              (0, K.jsxs)(`a`, {
-                href: `https://wa.me/${R}`,
-                target: `_blank`,
-                rel: `noopener noreferrer`,
+              (0, K.jsxs)(`button`, {
+                onClick: () => window.alert(`JISAJILI KISHA ACTIVATE ACCOUNT YAKO KUPATA MSAADA`),
+                type: `button`,
                 className: `grad-withdraw flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-bold text-on-color shadow-lg`,
                 children: [
                   (0, K.jsx)(v, { className: `size-4` }),
