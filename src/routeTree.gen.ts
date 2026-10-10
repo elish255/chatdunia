@@ -10,6 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PaymentRouteImport } from './routes/payment'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as WithdrawalRouteImport } from './routes/withdrawal'
+
+const RegisterRoute = RegisterRouteImport.update({ id: '/register', path: '/register', getParentRoute: () => rootRouteImport } as any)
+const LoginRoute = LoginRouteImport.update({ id: '/login', path: '/login', getParentRoute: () => rootRouteImport } as any)
+const PaymentRoute = PaymentRouteImport.update({ id: '/payment', path: '/payment', getParentRoute: () => rootRouteImport } as any)
+const AdminRoute = AdminRouteImport.update({ id: '/admin', path: '/admin', getParentRoute: () => rootRouteImport } as any)
+const WithdrawalRoute = WithdrawalRouteImport.update({ id: '/withdrawal', path: '/withdrawal', getParentRoute: () => rootRouteImport } as any)
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -19,24 +30,44 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/register': typeof RegisterRoute
+  '/login': typeof LoginRoute
+  '/payment': typeof PaymentRoute
+  '/admin': typeof AdminRoute
+  '/withdrawal': typeof WithdrawalRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/register': typeof RegisterRoute
+  '/login': typeof LoginRoute
+  '/payment': typeof PaymentRoute
+  '/admin': typeof AdminRoute
+  '/withdrawal': typeof WithdrawalRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/register': typeof RegisterRoute
+  '/login': typeof LoginRoute
+  '/payment': typeof PaymentRoute
+  '/admin': typeof AdminRoute
+  '/withdrawal': typeof WithdrawalRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/register' | '/login' | '/payment' | '/admin' | '/withdrawal'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/register' | '/login' | '/payment' | '/admin' | '/withdrawal'
+  id: '__root__' | '/' | '/register' | '/login' | '/payment' | '/admin' | '/withdrawal'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RegisterRoute: typeof RegisterRoute
+  LoginRoute: typeof LoginRoute
+  PaymentRoute: typeof PaymentRoute
+  AdminRoute: typeof AdminRoute
+  WithdrawalRoute: typeof WithdrawalRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,12 +79,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': { id: '/register'; path: '/register'; fullPath: '/register'; preLoaderRoute: typeof RegisterRouteImport; parentRoute: typeof rootRouteImport }
+    '/login': { id: '/login'; path: '/login'; fullPath: '/login'; preLoaderRoute: typeof LoginRouteImport; parentRoute: typeof rootRouteImport }
+    '/payment': { id: '/payment'; path: '/payment'; fullPath: '/payment'; preLoaderRoute: typeof PaymentRouteImport; parentRoute: typeof rootRouteImport }
+    '/admin': { id: '/admin'; path: '/admin'; fullPath: '/admin'; preLoaderRoute: typeof AdminRouteImport; parentRoute: typeof rootRouteImport }
+    '/withdrawal': { id: '/withdrawal'; path: '/withdrawal'; fullPath: '/withdrawal'; preLoaderRoute: typeof WithdrawalRouteImport; parentRoute: typeof rootRouteImport }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-}
+const rootRouteChildren: RootRouteChildren = { IndexRoute, RegisterRoute, LoginRoute, PaymentRoute, AdminRoute, WithdrawalRoute }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()

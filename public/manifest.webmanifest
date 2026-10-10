@@ -1,1 +1,1 @@
-{"name": "Chatdunia", "short_name": "Chatdunia", "lang": "sw", "start_url": "/", "scope": "/", "display": "standalone", "icons": [{"src": "/__l5e/assets-v1/aa41f36a-0199-4ec2-bdee-eae2c5cdf223/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}]}
+{"name": "Chatdunia", "short_name": "Chatdunia", "lang": "sw", "start_url": "/", "scope": "/", "display": "standalone", "icons": [{"src": "/brand-chatdunia.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any"}]}

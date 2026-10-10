@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
-import logoAsset from "@/assets/chatdunia/logo.png.asset.json";
+const logoAsset = { url: "/brand-chatdunia.svg" };
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
