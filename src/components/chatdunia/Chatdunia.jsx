@@ -3,7 +3,7 @@ import { jsx as reactJsx, jsxs as reactJsxs, Fragment } from "react/jsx-runtime"
 import { Button } from "@/components/ui/button";
 const logoAsset = { url: "/chatdunia/logo.png" };
 import { ArrowRight as f, BellRing as p, CircleCheck as m, Clock as h, Download as g, EllipsisVertical as _, Headphones as v, MessageCircle as y, MessageSquare as b, Moon as ee, PhoneOff as x, Phone as S, Plus as C, Send as w, Share as T, ShieldCheck as E, Star as D, Sun as O, TrendingUp as te, UserPlus as ne, Video as k, Wallet as A, X as j } from "lucide-react";
-const portraits = Object.fromEntries(Array.from({ length: 52 }, (_, index) => [`person-${index + 1}`, `/avatars/person-${index + 1}.jpg`]));
+const portraits = Object.fromEntries(Array.from({ length: 52 }, (_, index) => { const n = Math.floor(index / 2) + 10; const gender = index % 2 === 0 ? "women" : "men"; return [`person-${index + 1}`, `/avatars/${gender}-${n}.jpg`]; }));
 function render(factory, type, props, key) {
  if (type === "button") return factory(Button, { ...props, variant: "reference", size: "reference" }, key);
  if (type === "a") return factory(Button, { variant: "reference", size: "reference", asChild: true, children: factory("a", props) }, key);
