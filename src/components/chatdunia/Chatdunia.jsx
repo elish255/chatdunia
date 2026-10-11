@@ -204,7 +204,7 @@ function q({ person: e, onChat: t, onCall: n }) {
             children: [
               (0, K.jsx)(`img`, {
                 src: e.photo,
-                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = e.photo.replace(/\.jpg$/, `.svg`); },
+                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/avatars/women-10.jpg"; },
                 alt: `${e.name} kutoka ${e.country}`,
                 loading: `lazy`,
                 className: `size-16 rounded-full border-2 border-primary/40 object-cover`,
@@ -682,7 +682,7 @@ function se({ person: e, kind: t, onClose: n }) {
               })
             : (0, K.jsx)(`img`, {
                 src: e.photo,
-                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = e.photo.replace(/\.jpg$/, `.svg`); },
+                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/avatars/women-10.jpg"; },
                 alt: e.name,
                 className: `mx-auto size-24 rounded-full border-4 border-primary/40 object-cover`,
               }),

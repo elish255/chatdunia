@@ -29,7 +29,13 @@ export function AuthPage({ mode }: { mode: Mode }) {
           email: value("email").toLowerCase(), password,
           options: { data: { full_name: value("full_name"), username, phone: value("phone"), country: value("country") } },
         });
-        if (signUpError) throw signUpError;
+        if (signUpError) {
+          const detail = [signUpError.message, signUpError.code ? `Code: ${signUpError.code}` : ""].filter(Boolean).join(" — ");
+          if (/500|database error|trigger|duplicate key|chatdunia_users/i.test(detail)) {
+            throw new Error(`Usajili umeshindwa kuhifadhi taarifa kwenye database. Kama kosa linaendelea, endesha SQL ya kurekebisha usajili kwenye Supabase SQL Editor. Maelezo: ${detail}`);
+          }
+          throw new Error(detail);
+        }
         if (!data.session) {
           setMessage("Akaunti imetengenezwa lakini Supabase inahitaji uthibitisho wa email. Angalia inbox yako, au zima Confirm email kwenye Supabase Auth ili kuendelea moja kwa moja.");
           return;

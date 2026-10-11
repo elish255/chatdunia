@@ -94,7 +94,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "icon", href: "/chatdunia/favicon.png", type: "image/png" },
+      { rel: "icon", href: "/chatdunia/logo.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/chatdunia/logo.png" },
     ],
   }),
