@@ -4,7 +4,7 @@ import { jsx as reactJsx, jsxs as reactJsxs, Fragment } from "react/jsx-runtime"
 import { Button } from "@/components/ui/button";
 const logoAsset = { url: "/chatdunia/logo.png" };
 import { ArrowRight as f, BellRing as p, CircleCheck as m, Clock as h, Download as g, EllipsisVertical as _, Headphones as v, MessageCircle as y, MessageSquare as b, Moon as ee, PhoneOff as x, Phone as S, Plus as C, Send as w, Share as T, ShieldCheck as E, Star as D, Sun as O, TrendingUp as te, UserPlus as ne, Video as k, Wallet as A, X as j } from "lucide-react";
-const portraits = Object.fromEntries(Array.from({ length: 52 }, (_, index) => { const n = Math.floor(index / 2) + 10; const gender = index % 2 === 0 ? "women" : "men"; return [`person-${index + 1}`, `/avatars/${gender}-${n}.jpg`]; }));
+const portraits = Object.fromEntries(Array.from({ length: 52 }, (_, index) => { const n = Math.floor(index / 2) + 10; const gender = index % 2 === 0 ? "women" : "men"; return [`person-${index + 1}`, `/avators/${gender}-${n}.jpg`]; }));
 function render(factory, type, props, key) {
  if (type === "button") return factory(Button, { ...props, variant: "reference", size: "reference" }, key);
  if (type === "a") return factory(Button, { variant: "reference", size: "reference", asChild: true, children: factory("a", props) }, key);
@@ -204,7 +204,7 @@ function q({ person: e, onChat: t, onCall: n }) {
             children: [
               (0, K.jsx)(`img`, {
                 src: e.photo,
-                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/avatars/women-10.jpg"; },
+                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/avators/women-10.jpg"; },
                 alt: `${e.name} kutoka ${e.country}`,
                 loading: `lazy`,
                 className: `size-16 rounded-full border-2 border-primary/40 object-cover`,
@@ -682,7 +682,7 @@ function se({ person: e, kind: t, onClose: n }) {
               })
             : (0, K.jsx)(`img`, {
                 src: e.photo,
-                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/avatars/women-10.jpg"; },
+                onError: (event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/avators/women-10.jpg"; },
                 alt: e.name,
                 className: `mx-auto size-24 rounded-full border-4 border-primary/40 object-cover`,
               }),
@@ -1134,7 +1134,7 @@ function de() {
               }),
             ],
           }),
-          (0, K.jsxs)(`a`, {
+          !accountActive && (0, K.jsxs)(`a`, {
             href: L,
             className: `grad-brand mt-3 flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-bold text-on-color shadow-lg`,
             children: [
