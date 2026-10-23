@@ -1,0 +1,14 @@
+CHATDUNIA — SPLASHPAY VIA VERCEL SERVERLESS API (NO SUPABASE EDGE FUNCTION / NO WEBHOOK)
+
+1. Vercel Project > Settings > Environment Variables:
+   SPLASHPAY_API_KEY = pk_live_... (use test key in sandbox)
+   SPLASHPAY_API_SECRET = sk_live_... (use test secret in sandbox)
+   Keep existing Supabase variables required by the app:
+   SUPABASE_URL (or VITE_SUPABASE_URL)
+   SUPABASE_PUBLISHABLE_KEY (or VITE_SUPABASE_PUBLISHABLE_KEY)
+   SUPABASE_SERVICE_ROLE_KEY
+2. Redeploy the Vercel project after setting variables.
+3. Payment requests use POST /api/v1/payments/mobile-money and references beginning INV-.
+4. Status is polled from the Vercel API route; no webhook and no Supabase Edge Function deployment is required.
+
+IMPORTANT: The supplied SplashPay documentation describes a Payment Status endpoint but does not include its URL or request schema. The current handler uses POST /api/v1/payments/check-status with JSON body { "reference": "INV-..." } as a provisional endpoint. Confirm this exact URL with SplashPay documentation/support before live transactions. Do not treat a payment as complete unless the status endpoint returns data.status = success.
