@@ -22,9 +22,10 @@ begin
     v_username := left(v_base, 24 - length(v_suffix::text) - 1) || '_' || v_suffix::text;
   end loop;
 
-  insert into public.chatdunia_users(id, full_name, username, phone, country)
-  values (new.id, coalesce(new.raw_user_meta_data->>'full_name', ''), v_username, coalesce(new.raw_user_meta_data->>'phone', ''), coalesce(new.raw_user_meta_data->>'country', ''))
+  insert into public.chatdunia_users(id, email, full_name, username, phone, country)
+  values (new.id, lower(nullif(trim(new.email), '')), coalesce(new.raw_user_meta_data->>'full_name', ''), v_username, coalesce(new.raw_user_meta_data->>'phone', ''), coalesce(new.raw_user_meta_data->>'country', ''))
   on conflict (id) do update set
+    email = excluded.email,
     full_name = excluded.full_name,
     phone = excluded.phone,
     country = excluded.country;

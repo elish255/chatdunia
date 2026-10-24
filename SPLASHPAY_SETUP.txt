@@ -12,3 +12,5 @@ CHATDUNIA — SPLASHPAY VIA VERCEL SERVERLESS API (NO SUPABASE EDGE FUNCTION / N
 4. Status is polled from the Vercel API route; no webhook and no Supabase Edge Function deployment is required.
 
 IMPORTANT: The supplied SplashPay documentation describes a Payment Status endpoint but does not include its URL or request schema. The current handler uses POST /api/v1/payments/check-status with JSON body { "reference": "INV-..." } as a provisional endpoint. Confirm this exact URL with SplashPay documentation/support before live transactions. Do not treat a payment as complete unless the status endpoint returns data.status = success.
+
+Chatdunia login now accepts username; /api/chatdunia-auth resolves the username server-side and signs in using Supabase Auth. Keep SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, and SUPABASE_SERVICE_ROLE_KEY configured in Vercel.

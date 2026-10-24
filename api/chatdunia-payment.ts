@@ -50,10 +50,17 @@ export default async function handler(req: any, res: any) {
       if (![16000, 32000].includes(amount) || (purpose === "premium" && amount !== 32000) || (purpose !== "premium" && amount !== 16000)) {
         return send(res, 400, { message: "Kiasi cha malipo si sahihi." });
       }
-      const { data: profile, error: profileError } = await admin.from("chatdunia_users").select("full_name,username,email,activation_paid,account_status,is_premium").eq("id", user.id).maybeSingle();
+      const { data: profile, error: profileError } = await admin.from("chatdunia_users").select("email,full_name,username,activation_paid,account_status,is_premium").eq("id", user.id).maybeSingle();
       if (profileError || !profile) return send(res, 404, { message: "Taarifa za akaunti hazijapatikana." });
       if (purpose === "activation" && profile.activation_paid && profile.account_status === "active") return send(res, 409, { message: "Akaunti yako tayari imewashwa." });
       if (purpose === "premium" && profile.is_premium) return send(res, 409, { message: "Akaunti yako tayari ni Premium." });
+
+      // Use the real email saved on the user's profile, with Supabase Auth as a real-data fallback.
+      // Never fabricate an email address for a payment provider.
+      const customerEmail = String(profile.email || user.email || "").trim().toLowerCase();
+      if (!customerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
+        return send(res, 400, { message: "Email halisi ya akaunti haijapatikana. Hakikisha email ya usajili ipo kwenye Supabase Auth na jedwali chatdunia_users, kisha jaribu tena." });
+      }
 
       const reference = makeReference();
       const providerResponse = await fetch(`${API_BASE}/payments/mobile-money`, {
@@ -62,7 +69,7 @@ export default async function handler(req: any, res: any) {
         body: JSON.stringify({
           amount, currency: "TZS", reference, phone,
           customer_name: String(profile.full_name || profile.username || "Chatdunia User"),
-          customer_email: String(user.email || `${user.id}@chatdunia.online`),
+          customer_email: customerEmail,
           metadata: { user_id: user.id, purpose, product: purpose === "premium" ? "Chatdunia Premium" : "Chatdunia activation" },
         }),
       });
@@ -70,7 +77,7 @@ export default async function handler(req: any, res: any) {
       const order = nestedData(providerBody);
       if (!providerResponse.ok || String(providerBody?.status || "").toLowerCase() !== "success" || !order?.reference) {
         console.error("SplashPay create payment failed", providerResponse.status, providerBody);
-        return send(res, 502, { message: providerBody?.message || "Imeshindikana kuanzisha." });
+        return send(res, 502, { message: "Imeshindikana kuanzisha malipo kwa sasa. Hakikisha taarifa zako ni sahihi kisha ujaribu tena." });
       }
       const orderId = String(order.reference);
       const { error: insertError } = await admin.from("chatdunia_payments").insert({
@@ -81,7 +88,7 @@ export default async function handler(req: any, res: any) {
         console.error("Could not save SplashPay payment", insertError);
         return send(res, 500, { message: "Ombi limeanzishwa lakini kumbukumbu haijahifadhiwa. Tafadhali wasiliana na huduma kwa wateja kabla ya kujaribu tena." });
       }
-      return send(res, 200, { order_id: orderId, payment_status: String(order.status || "pending").toUpperCase(), message: providerBody?.message || "Ombi limetumwa. Thibitisha kwenye simu yako; tunakagua hali ya malipo moja kwa moja." });
+      return send(res, 200, { order_id: orderId, payment_status: String(order.status || "pending").toUpperCase(), message: "Ombi la malipo limetumwa. Thibitisha kwenye simu yako; tunakagua hali ya malipo moja kwa moja." });
     }
 
     if (body.action === "status") {
@@ -100,7 +107,7 @@ export default async function handler(req: any, res: any) {
       const result = nestedData(providerBody);
       if (!providerResponse.ok || String(providerBody?.status || "").toLowerCase() !== "success" || !result) {
         console.error("SplashPay status request failed", providerResponse.status, providerBody);
-        return send(res, providerResponse.status === 404 ? 404 : 502, { message: providerBody?.message || "Imeshindikana kuthibitisha hali ya malipo kwa sasa." });
+        return send(res, providerResponse.status === 404 ? 404 : 502, { message: "Imeshindikana kuthibitisha hali ya malipo kwa sasa. Tafadhali jaribu tena." });
       }
       const status = String(result?.status || result?.payment_status || "pending").toUpperCase();
       const isSuccess = status === "SUCCESS";
